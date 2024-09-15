@@ -3,7 +3,7 @@ import cors from "cors"
 import bcrypt from "bcrypt"
 import { databaseConnect } from "./database.js"
 
-const port = 5000
+const port = 3000
 const app = express()
 app.use(cors())
 app.use(express.json())
