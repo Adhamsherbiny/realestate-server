@@ -20,8 +20,6 @@ const port = 5000
 const app = express()
 app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE'], 
-  allowedHeaders: ['Content-Type', 'Authorization'], 
-  maxAge: 3600, 
 }))
 app.use(express.json())
 
