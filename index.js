@@ -31,15 +31,17 @@ app.get("/" , (req , res)=>{
 
 app.post( "/singup", (req , res)=>{
     const {username , email , password , phone} = req.body
-    databaseConnect.query(`SELECT * FROM users where username =${username}` , (err , result)=>{
+    databaseConnect.query(`SELECT * FROM users where username=${username}` , (err , result)=>{
         if(err) throw err;
+        console.log(err)
         if(result.length > 0){
             return res.status(400).json({message: "username already exist"})
         }
         bcrypt.hash(password , 10 , (err , hash)=>{
             if(err) throw err;
-            databaseConnect.query(`INSERT INTO users (username , email , password , phone) VALUES ("${username}" , "${email}" , "${hash}" , "${phone}")` , (err , result)=>{
+            databaseConnect.query(`INSERT INTO users (username , email , password , phone , role) VALUES ("${username}" , "${email}" , "${hash}" , "${phone}" , 1)` , (err , result)=>{
                 if(err) throw err;
+                console.log(err)
                 res.status(200).json({message:"user created"})
             })
         })
