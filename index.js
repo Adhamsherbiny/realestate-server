@@ -22,16 +22,30 @@ app.use(cors())
 app.use(express.json())
 
 app.get("/" , (req , res)=>{
-    res.send("Home Page")
+    res.status(200).send(`
+        Welcome to realestate server dashboard
+        I know you are admin or developer enjoy on our server
+        we are created this page to say welcome to you
+        `)
 })
 
-app.get("/home" , (req , res)=>{
-    res.send("hello in server")
+app.post( "/singup", (req , res)=>{
+    const {username , email , password , phone} = req.body
+    databaseConnect.query(`SELECT * FROM users where username =${username}` , (err , result)=>{
+        if(err) throw err;
+        if(result.length > 0){
+            return res.status(400).json({message: "username already exist"})
+        }
+        bcrypt.hash(password , 10 , (err , hash)=>{
+            if(err) throw err;
+            databaseConnect.query(`INSERT INTO users (username , email , password , phone) VALUES ("${username}" , "${email}" , "${hash}" , "${phone}")` , (err , result)=>{
+                if(err) throw err;
+                res.status(200).json({message:"user created"})
+            })
+        })
+    })
 })
 
-app.get("/page" , (req , res)=>{
-    res.json({msg: 'hello in page'})
-})
 
 app.listen(port , ()=>{
     console.log(`app is listenning port ${port}`)
