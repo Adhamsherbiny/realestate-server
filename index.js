@@ -18,7 +18,12 @@ databaseConnect.connect((err)=>{
 
 const port = 5000
 const app = express()
-app.use(cors())
+app.use(cors({
+    origin: 'https://real-estate-1wmzs0yvf-adhamsherbinys-projects.vercel.app', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+  allowedHeaders: ['Content-Type', 'Authorization'], 
+  maxAge: 3600, 
+}))
 app.use(express.json())
 
 app.get("/" , (req , res)=>{
