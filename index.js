@@ -34,7 +34,10 @@ app.post( "/singup", (req , res)=>{
         res.json({error: err})
         console.log("database is ready to use")
     })
-    const {username , email , password , phone} = req.body
+    const username = req.body.username
+    const email = req.body.email
+    const password = req.body.password
+    const phone = req.body.phone
     databaseConnect.query(`SELECT * FROM users where username= '${username}'` , (err , result)=>{
         if(err) throw err;
         res.json({error: err})
