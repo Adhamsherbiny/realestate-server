@@ -4,10 +4,10 @@ import bcrypt from "bcrypt"
 import mysql from "mysql";
  
 const databaseConnect = mysql.createConnection({
-    host:"sql8.freesqldatabase.com",
-    user: "sql8731358",
-    password:"RFQTTVgNJh" ,
-    database:"sql8731358",
+    host:"bh4belfcjrq80irlh9dq-mysql.services.clever-cloud.com",
+    user: "ulbztlplcjiazjxh",
+    password:"A5PJbrPeFIhoshbPqIYc" ,
+    database:"bh4belfcjrq80irlh9dq",
 })
 
 
