@@ -46,7 +46,7 @@ app.post( "/singup", (req , res)=>{
         }
         bcrypt.hash(password , 10 , (err , hash)=>{
             if(err) throw err;
-            databaseConnect.query(`INSERT INTO users (username , email , password , phone , role) VALUES ("${username}" , "${email}" , "${hash}" , "${phone}" , 1)` , (err , result)=>{
+            databaseConnect.query(`INSERT INTO users (username , email , password , phone , role) VALUES =?` ,[username , email , hash , phone , 1], (err , result)=>{
                 if(err) throw err;
                 res.json({error: err})
                 res.status(200).json({message:"user created" , respon: result})
