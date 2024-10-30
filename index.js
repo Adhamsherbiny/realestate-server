@@ -11,10 +11,7 @@ const databaseConnect = mysql.createConnection({
 })
 
 
-databaseConnect.connect((err)=>{
-    if(err) throw err;
-    console.log("database is ready to use")
-})
+
 
 const port = 5000
 const app = express()
@@ -32,6 +29,11 @@ app.get("/" , (req , res)=>{
 })
 
 app.post( "/singup", (req , res)=>{
+    databaseConnect.connect((err)=>{
+        if(err) throw err;
+        res.json({error: err})
+        console.log("database is ready to use")
+    })
     const {username , email , password , phone} = req.body
     databaseConnect.query(`SELECT * FROM users where username=${username}` , (err , result)=>{
         if(err) throw err;
