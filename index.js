@@ -1,4 +1,4 @@
-import express from "express"
+import express, { response } from "express"
 import cors from "cors"
 import bcrypt from "bcrypt"
 import mysql from "mysql";
@@ -35,7 +35,7 @@ app.post( "/singup", (req , res)=>{
     const {username , email , password , phone} = req.body
     databaseConnect.query(`SELECT * FROM users where username=${username}` , (err , result)=>{
         if(err) throw err;
-        console.log(err)
+        res.json({error: err})
         if(result.length > 0){
             return res.status(400).json({message: "username already exist"})
         }
@@ -43,8 +43,8 @@ app.post( "/singup", (req , res)=>{
             if(err) throw err;
             databaseConnect.query(`INSERT INTO users (username , email , password , phone , role) VALUES ("${username}" , "${email}" , "${hash}" , "${phone}" , 1)` , (err , result)=>{
                 if(err) throw err;
-                console.log(err)
-                res.status(200).json({message:"user created"})
+                res.json({error: err})
+                res.status(200).json({message:"user created" , respon: result})
             })
         })
     })
