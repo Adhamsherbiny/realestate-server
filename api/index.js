@@ -25,6 +25,10 @@ app.get("/home" , (req , res)=>{
     res.send("hello in server")
 })
 
+app.get("/page" , (req , res)=>{
+    res.json({msg: 'hello in page'})
+})
+
 app.listen(port , ()=>{
     console.log(`app is listenning port ${port}`)
 })
