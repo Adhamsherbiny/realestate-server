@@ -30,26 +30,21 @@ app.get("/" , (req , res)=>{
         `)
 })
 
-app.post( "/singup", (req , res)=>{
+app.post( "/singup", async (req , res)=>{
     const username = req.body.username
     const email = req.body.email
     const password = req.body.password
     const phone = req.body.phone
-    databaseConnect.query(`select * from users where  username = '${username}'` , (err , result)=>{
+    databaseConnect.query(`select * from users where  username = '${username}'` , async (err , result)=>{
         if(err) throw err;
-        res.json({checkerror: err})
-        if(result.length > 0){
-            return res.status(400).json({message: "username already exist"})
+        const userData = [...result]
+        if(userData.length <= 0){
+            const hash = await bcrypt.hash(password , 10 )  
+            databaseConnect.query(`INSERT INTO users (username , email , password , phone , role) VALUES (?,?,?,?,?)` ,[username , email , hash , phone , 1], (err , result)=>{
+                res.status(200).json({message:"user created" , respon: result , sqlsyntaxerror: err})
+            })
         } else{
-            bcrypt.hash(password , 10 , async(err ,  hash)=>{
-                if(err) throw err;
-                databaseConnect.query(`INSERT INTO users (username , email , password , phone , role) VALUES (?,?,?,?,?)` ,[username , email , hash , phone , 1], (err , result)=>{
-                    if(err) throw err;
-                    res.json({sqlsyntaxerror: err})
-                    res.status(200).json({message:"user created" , respon: result})
-                    res.send("user created")
-                })
-            })    
+            res.status(400).json({message: "username already exist"})
         }
         
     })
