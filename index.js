@@ -12,7 +12,6 @@ const databaseConnect = mysql.createConnection({
 
 databaseConnect.connect((err)=>{
     if(err) throw err;
-    res.json({DatabaseError: err})
     console.log("database is ready to use")
 })
 
