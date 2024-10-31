@@ -37,7 +37,7 @@ app.post( "/singup", (req , res)=>{
     const phone = req.body.phone
     databaseConnect.query(`SELECT * FROM users where username= '${username}'` , (err , result)=>{
         if(err) throw err;
-        res.json({error: err})
+        res.json({checkerror: err})
         if(result.length > 0){
             return res.status(400).json({message: "username already exist"})
         } else{
@@ -45,7 +45,7 @@ app.post( "/singup", (req , res)=>{
                 if(err) throw err;
                 databaseConnect.query(`INSERT INTO users (username , email , password , phone , role) VALUES =(?)` ,[username , email , hash , phone , 1], (err , result)=>{
                     if(err) throw err;
-                    res.json({error: err})
+                    res.json({sqlsyntaxerror: err})
                     res.status(200).json({message:"user created" , respon: result})
                 })
             })    
