@@ -57,10 +57,12 @@ app.post("/singup", async (req, res) => {
 })
 
 app.get("/checkLog", async (req, res) => {
-    if(localStorage.getItem("login-status")!= null){
-        res.json({message : localStorage.getItem("login-status") , username: localStorage.getItem("username")})
+    const loginStatus = localStorage.getItem("login-status")
+    const username = localStorage.getItem("username")
+    if( loginStatus != null){
+        res.status(200).json({message : loginStatus , username: username })
     }else{
-        res.json({message : "not login"})
+        res.status(400).json({message : "not login"})
     }
 })
 
