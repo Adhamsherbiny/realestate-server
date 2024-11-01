@@ -53,8 +53,15 @@ app.post("/singup", async (req, res) => {
         } else {
             res.status(400).json({ message: "username already exist" })
         }
-
     })
+})
+
+app.get("/checkLog", async (req, res) => {
+    if(localStorage.getItem("login-status")!= null){
+        res.json({message : localStorage.getItem("login-status") , username: localStorage.getItem("username")})
+    }else{
+        res.json({message : "not login"})
+    }
 })
 
 app.post("/login", async (req, res) => {
