@@ -2,6 +2,8 @@ import express, { response } from "express"
 import cors from "cors"
 import bcrypt from "bcrypt"
 import mysql from "mysql";
+import multer from "multer"
+import path from "path"
 
 const databaseConnect = mysql.createConnection({
     host: "bh4belfcjrq80irlh9dq-mysql.services.clever-cloud.com",
@@ -16,6 +18,7 @@ const databaseConnect = mysql.createConnection({
 //     password:"" ,
 //     database:"realestate",
 // })
+
 
 databaseConnect.connect((err) => {
     if (err) throw err;
@@ -36,6 +39,37 @@ app.get("/", (req, res) => {
         we are created this page to say welcome to you
         `)
 })
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "Public/Images");
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
+    }
+});
+
+// Define multer upload to accept specific fields
+const upload = multer({ storage: storage }).fields([
+    { name: "imageOne", maxCount: 1 },
+    { name: "imageTwo", maxCount: 1 },
+    { name: "imageThree", maxCount: 1 },
+]);
+
+app.post("/uploadpost", upload, (req, res) => {
+    const { adress, floor, phone, city, price, type, area, rooms, bathrooms, description } = req.body;
+    const imageOne = req.files["imageOne"] ? req.files["imageOne"][0].filename : null;
+    const imageTwo = req.files["imageTwo"] ? req.files["imageTwo"][0].filename : null;
+    const imageThree = req.files["imageThree"] ? req.files["imageThree"][0].filename : null;
+
+    const sql = `INSERT INTO posts (adress, floor, phone, city, price, type, area, rooms, bathrooms, description, imageOne, imageTwo, imageThree) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+    databaseConnect.query(sql, [adress, floor, phone, city, price, type, area, rooms, bathrooms, description, imageOne, imageTwo, imageThree], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: "Error creating post", error: err });
+        }
+        res.status(200).json({ message: "Post created successfully", response: result });
+    });
+});
 
 app.post("/singup", async (req, res) => {
     const username = req.body.username
