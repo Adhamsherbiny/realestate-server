@@ -28,11 +28,19 @@ const port = 5000;
 const app = express();
 app.use("/img/pics", express.static("Public/Images"));
 
-app.use(
-  cors({
-    methods: ["GET", "POST", "PUT", "DELETE"],
-  })
-);
+const allowedOrigins = ['https://real-estate-bay-theta.vercel.app']; // Add the client origin
+
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify methods allowed
+  credentials: true, // Include credentials if needed
+}));
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://real-estate-bay-theta.vercel.app");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.use(express.json());
 
 app.get("/", (req, res) => {
