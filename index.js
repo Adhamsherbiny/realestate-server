@@ -28,17 +28,22 @@ const port = 5000;
 const app = express();
 app.use("/img/pics", express.static("Public/Images"));
 
-const allowedOrigins = ['https://real-estate-bay-theta.vercel.app']; // Add the client origin
-
-app.use(cors({
-  origin: allowedOrigins,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify methods allowed
-  credentials: true, // Include credentials if needed
-}));
+app.use(
+  cors({
+    methods: ["GET", "POST", "PUT", "DELETE"], // Specify methods allowed
+    credentials: true, // Include credentials if needed
+  })
+);
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://real-estate-bay-theta.vercel.app");
+  res.header(
+    "Access-Control-Allow-Origin",
+    "https://real-estate-bay-theta.vercel.app"
+  );
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   next();
 });
 app.use(express.json());
@@ -115,7 +120,7 @@ app.post("/uploadpost", upload, (req, res) => {
       if (err) {
         return res
           .status(500)
-          .json({ message: "Error creating post", error: err });
+          .json({ message: "Error creating post", error: `Errrrrrr ${err}` });
       }
       res
         .status(200)
@@ -140,13 +145,11 @@ app.post("/singup", async (req, res) => {
           `INSERT INTO users (username , email , password , phone , role) VALUES (?,?,?,?,?)`,
           [username, email, hash, phone, 1],
           (err, result) => {
-            res
-              .status(200)
-              .json({
-                message: "created successfully",
-                respon: result,
-                sqlsyntaxerror: err,
-              });
+            res.status(200).json({
+              message: "created successfully",
+              respon: result,
+              sqlsyntaxerror: err,
+            });
           }
         );
       } else {
@@ -160,13 +163,11 @@ app.post("/deletepost", async (req, res) => {
   databaseConnect.query(
     `DELETE FROM posts WHERE id = ${id}`,
     async (err, result) => {
-      res
-        .status(200)
-        .json({
-          message: "deleted successfully",
-          respon: result,
-          sqlsyntaxerror: err,
-        });
+      res.status(200).json({
+        message: "deleted successfully",
+        respon: result,
+        sqlsyntaxerror: err,
+      });
     }
   );
 });
@@ -204,15 +205,13 @@ app.post("/login", async (req, res) => {
           userData[0].password
         );
         if (passwordMatch) {
-          res
-            .status(200)
-            .json({
-              message: "login successfully",
-              login: true,
-              username: username,
-              respon: result,
-              sqlsyntaxerror: err,
-            });
+          res.status(200).json({
+            message: "login successfully",
+            login: true,
+            username: username,
+            respon: result,
+            sqlsyntaxerror: err,
+          });
         } else {
           res.status(400).json({ message: "password not match" });
         }
